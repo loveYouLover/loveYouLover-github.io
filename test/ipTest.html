@@ -14,6 +14,7 @@
     //浏览器返回结果：（前提是需要有网络）
     //var returnCitySN = {"cip": "14.153.20.119", "cid": "440300", "cname": "广东省深圳市"};
     alert(returnCitySN.cip);
+    alert(returnCitySN.cid);
     AMap.plugin('AMap.CitySearch', function () {
         var citySearch = new AMap.CitySearch()
         citySearch.getCityByIp(returnCitySN.cip,function(status, result){
