@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>高德地图获取当前城市</title>
+    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.15&key=943991f38e4aec19029d284ff4ffac9c&plugin=AMap.CitySearch"></script>
+</head>
+<body>
+<div id="tip"></div>
+<script type="text/javascript">
+    //异步方法
+    Promise.prototype.finally = function (callback) {
+        var P = this.constructor;
+        return this.then(
+            function(value){
+                P.resolve(callback()).then(function(){
+                    return value
+                })
+            },
+            function(reason){
+                P.resolve(callback()).then(function(){
+                    throw reason
+                })
+            }
+        );
+    };
+    //获取用户所在城市信息
+    function showCityInfo() {
+        return new Promise(function (resolve, reject) {
+            var res;
+            //实例化城市查询类
+            var citysearch = new AMap.CitySearch();
+            //自动获取用户IP，返回当前城市
+            citysearch.getLocalCity(function(status, result) {
+                if (status === 'complete' && result.info === 'OK') {
+                    if (result && result.city && result.bounds) {
+                        var cityinfo = result.city;
+                        var citybounds = result.bounds;
+                        res = cityinfo;
+                    }
+                } else {
+                    res = result.info;
+                }
+                resolve(res);
+            });
+        });
+    }
+    showCityInfo().then(function(res){
+        console.log('当前城市->',res);
+    });
+</script>
+</body>
+</html>
